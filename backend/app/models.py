@@ -11,7 +11,11 @@ class User(Base):
     username = Column(String, unique=True, nullable=False)
     hashed_password = Column(String, nullable=False)
 
-    tasks = relationship("Task", back_populates="owner")
+    tasks = relationship(
+        "Task",
+        back_populates="owner",
+        foreign_keys="Task.owner_id",
+    )
 
 
 class Task(Base):
@@ -23,4 +27,7 @@ class Task(Base):
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    owner = relationship("User", back_populates="tasks")
+    owner = relationship("User", back_populates="tasks", foreign_keys=[owner_id])
+
+    completed_by_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    completed_by = relationship("User", foreign_keys=[completed_by_id])
