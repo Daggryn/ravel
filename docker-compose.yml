@@ -1,0 +1,26 @@
+services:
+  backend:
+    build: ./backend
+    container_name: ravel-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/data:/app/data
+    environment:
+      - SECRET_KEY=changethistoareallylongrandomstring
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=10080
+      - DATABASE_URL=sqlite:///./data/ravel.db
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        PUBLIC_API_URL: http://localhost:8000
+    container_name: ravel-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
