@@ -10,6 +10,7 @@
     markDone
   } from '$lib/api.js';
   import { goto } from '$app/navigation';
+import { resolve } from '$app/paths';
 
   let myTasks = $state([]);
   let theirTasks = $state([]);
@@ -19,7 +20,7 @@
 
   onMount(async () => {
     if (!getToken()) {
-      await goto('/');
+      await goto(resolve('/'));
       return;
     }
     await load();
@@ -61,7 +62,7 @@
 
   function handleLogout() {
     logout();
-    goto('/');
+    goto(resolve('/'));
   }
 </script>
 
